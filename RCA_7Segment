@@ -9,8 +9,8 @@ module Exp2(A,B,S,Cout);
 	FullAdder FA2(.a(A[2]), .b(B[2]), .e(C[1]), .s(S[2]), .c(C[2]));
 	FullAdder FA3(.a(A[3]), .b(B[3]), .e(C[2]), .s(S[3]), .c(Cout));
 	
-	SevenSegmentDecoder SSD1(.binary(S[3:0]),  .seg(Seg1)); 
-	SevenSegmentDecoder SSD2(.binary(4'b0000), .seg(Seg2));
+	SevenSegmentDecoder SSD1(.binary(S[3:0]),  .seg1(Seg1)); 
+	SevenSegmentDecoder SSD2(.binary(S[3:0]),  .seg2(Seg2));
 
 endmodule
 
@@ -50,7 +50,7 @@ module SevenSegmentDecoder (
 				4'b1101: seg1 = 7'b1111001; // 13
 				4'b1110: seg1 = 7'b0110011; // 14
 				4'b1111: seg1 = 7'b1011011; // 15
-            default: seg1 = 7'b0000000; // Off
+
             4'b0000: seg2 = 7'b1111110; // 0
             4'b0000: seg2 = 7'b1111110; // 0
 				4'b0000: seg2 = 7'b1111110; // 0
@@ -60,12 +60,12 @@ module SevenSegmentDecoder (
 				4'b0000: seg2 = 7'b1111110; // 0
 				4'b0000: seg2 = 7'b1111110; // 0
 				4'b0000: seg2 = 7'b1111110; // 0
-            4'b1010: seg2 = 7'b1111110; // 10
-            4'b1011: seg2 = 7'b1111110; // 11
-				4'b1100: seg2 = 7'b1111110; // 12
-				4'b1101: seg2 = 7'b1111110; // 13
-				4'b1110: seg2 = 7'b1111110; // 14
-				4'b1111: seg2 = 7'b1111110; // 15
+            4'b1010: seg2 = 7'b0110000; // 10
+            4'b1011: seg2 = 7'b0110000; // 11
+				4'b1100: seg2 = 7'b0110000; // 12
+				4'b1101: seg2 = 7'b0110000; // 13
+				4'b1110: seg2 = 7'b0110000; // 14
+				4'b1111: seg2 = 7'b0110000; // 15
             default: seg2 = 7'b0000000; // Off
         endcase
     end
