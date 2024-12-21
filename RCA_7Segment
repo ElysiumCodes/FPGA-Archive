@@ -1,0 +1,72 @@
+module Exp2(A,B,S,Cout);
+	input [3:0]A,B;
+	output [3:0]S;
+	output Cout;
+	wire [2:0]C;
+	
+	FullAdder FA0(.a(A[0]), .b(B[0]), .e(0), .s(S[0]), .c(C[0]));
+	FullAdder FA1(.a(A[1]), .b(B[1]), .e(C[0]), .s(S[1]), .c(C[1]));
+	FullAdder FA2(.a(A[2]), .b(B[2]), .e(C[1]), .s(S[2]), .c(C[2]));
+	FullAdder FA3(.a(A[3]), .b(B[3]), .e(C[2]), .s(S[3]), .c(Cout));
+	
+	SevenSegmentDecoder SSD1(.binary(S[3:0]),  .seg(Seg1)); 
+	SevenSegmentDecoder SSD2(.binary(4'b0000), .seg(Seg2));
+
+endmodule
+
+module FullAdder(
+	input a,b,e,
+	output s,c
+);
+
+	assign s=(a^b)^e;
+	assign c=(a&b)|((a^b)&e);
+	
+endmodule
+
+
+
+module SevenSegmentDecoder (
+    input [3:0] binary,    // 4-bit binary input (0-15)
+    output reg [6:0] seg1,
+	 output reg [6:0] seg2    // 7-segment display output
+);
+
+    always @(binary) begin
+        case(binary)
+            4'b0000: seg1 = 7'b1111110; // 0
+            4'b0001: seg1 = 7'b0110000; // 1
+            4'b0010: seg1 = 7'b1101101; // 2
+            4'b0011: seg1 = 7'b1111001; // 3
+            4'b0100: seg1 = 7'b0110011; // 4
+            4'b0101: seg1 = 7'b1011011; // 5
+            4'b0110: seg1 = 7'b1011111; // 6
+            4'b0111: seg1 = 7'b1110000; // 7
+            4'b1000: seg1 = 7'b1111111; // 8
+            4'b1001: seg1 = 7'b1111011; // 9
+            4'b1010: seg1 = 7'b1111110; // 10
+            4'b1011: seg1 = 7'b0110000; // 11
+				4'b1100: seg1 = 7'b1101101; // 12
+				4'b1101: seg1 = 7'b1111001; // 13
+				4'b1110: seg1 = 7'b0110011; // 14
+				4'b1111: seg1 = 7'b1011011; // 15
+            default: seg1 = 7'b0000000; // Off
+            4'b0000: seg2 = 7'b1111110; // 0
+            4'b0000: seg2 = 7'b1111110; // 0
+				4'b0000: seg2 = 7'b1111110; // 0
+				4'b0000: seg2 = 7'b1111110; // 0
+				4'b0000: seg2 = 7'b1111110; // 0
+				4'b0000: seg2 = 7'b1111110; // 0
+				4'b0000: seg2 = 7'b1111110; // 0
+				4'b0000: seg2 = 7'b1111110; // 0
+				4'b0000: seg2 = 7'b1111110; // 0
+            4'b1010: seg2 = 7'b1111110; // 10
+            4'b1011: seg2 = 7'b1111110; // 11
+				4'b1100: seg2 = 7'b1111110; // 12
+				4'b1101: seg2 = 7'b1111110; // 13
+				4'b1110: seg2 = 7'b1111110; // 14
+				4'b1111: seg2 = 7'b1111110; // 15
+            default: seg2 = 7'b0000000; // Off
+        endcase
+    end
+endmodule
