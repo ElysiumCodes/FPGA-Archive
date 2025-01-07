@@ -1,0 +1,107 @@
+module Counter(
+
+    input clk,     // Input clock (50 MHz)
+    input rst,     // Reset signal
+    output reg slowclk,  // Output slow clock (clk/5)
+    output reg [2:0] count  // 3-bit counter to count up to 5
+);
+
+    always @(posedge clk or posedge rst) begin
+        if (rst) begin
+            count <= 3'b000;  // Reset the counter to 0
+            slowclk <= 0;     // Reset the slow clock
+        end else begin
+            if (count == 3'b100) begin  // When count reaches 5 (100 in binary)
+                count <= 3'b000;  // Reset the count to 0
+                slowclk <= ~slowclk;  // Toggle the slow clock
+            end 
+        end
+    end
+endmodule
+
+
+
+
+
+
+
+
+
+
+module UpDown(
+	input clk,
+	input rst,
+	input switch,
+	output reg[3:0] count
+);
+	always@(posedge clk or posedge rst) begin
+		if(rst)begin 
+			count<=4'b0000;
+		end else begin 
+			if(switch) begin 
+				count<=count+1;
+			end
+			else begin 
+				count<=count-1;
+			end
+		end
+	end
+endmodule
+
+
+
+
+
+
+
+
+
+
+
+
+module Top(
+	input clk, 
+	input rst,
+	input upDown,
+	output [7:0]binary
+);
+
+	wire slowclk;
+	wire [3:0] count;
+	Counter sclk(.slowclk(clk), .rst(rst));
+	UpDown count(.count(count));
+	SevenSegmentDecoder SSD1(.binary(S[3:0]),  .seg1(Seg1)); 
+endmodule
+
+
+
+
+
+
+
+
+
+
+	
+	module SevenSegmentDecoder (
+    input [3:0] binary,    // 4-bit binary input (0-15)
+    output reg [6:0] seg1,   // 7-segment display output
+);
+
+    always @(binary) begin
+        case(binary)
+            4'b0000: seg1 = 7'b1000000; // 0
+            4'b0001: seg1 = 7'b1111001; // 1
+            4'b0010: seg1 = 7'b0100100; // 2
+            4'b0011: seg1 = 7'b0110000; // 3
+            4'b0100: seg1 = 7'b0011001; // 4
+            4'b0101: seg1 = 7'b0010010; // 5
+            4'b0110: seg1 = 7'b0000010; // 6
+            4'b0111: seg1 = 7'b1111000; // 7
+            4'b1000: seg1 = 7'b0000000; // 8
+            4'b1001: seg1 = 7'b0010000; // 9
+            default: seg1 = 7'b1111111; // Blank
+
+        endcase
+    end
+endmodule
